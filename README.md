@@ -10,6 +10,6 @@
 
 2、chrome 打开 [chrome://extensions](chrome://extensions)，钩上右上角的开发者选项，把解压好的文件夹拖进去
 
-3、打开 [https://y.qq.com?forceUpdateCookie=1](https://y.qq.com)，并登陆账号，会自动将 Cookie 信息存到
+3、打开 [https://y.qq.com](https://y.qq.com?forceUpdateCookie=1)，并登陆账号，会自动将 Cookie 信息存到
    [https://api.qq.jsososo.com](https://api.qq.jsososo.com) 这台服务器上，然后自动跳转到 [http://music.jsososo.com](http://music.jsososo.com)
    再将刚才上传的 cookie 信息获取下来

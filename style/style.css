@@ -1,0 +1,22 @@
+#soso-music-cookie-toast {
+    position: fixed;
+    top: 40px;
+    width: 100vw;
+    text-align: center;
+    height: 40px;
+    display: none;
+    z-index: 9999;
+}
+
+#soso-music-cookie-toast .content {
+    display: inline-block;
+    height: 30px;
+    box-shadow: 0 0 5px #0003;
+    background: #000c;
+    border-radius: 4px;
+    padding: 5px 30px;
+    color: #fffa;
+    text-align: center;
+    font-size: 14px;
+    line-height: 30px;
+}

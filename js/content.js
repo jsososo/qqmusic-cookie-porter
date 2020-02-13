@@ -7,8 +7,8 @@
   if (window.location.href.indexOf('forceUpdateCookie') > 0) {
     localStorage.setItem('soso-music-cookie', '0');
   }
-  // 大于8小时的就先不发送了
-  if (lastSetTime + 3600000 * 8 > now) {
+  // 24小时以内的就先不发送了
+  if (lastSetTime + 3600000 * 24 > now) {
     return;
   }
 
@@ -34,7 +34,7 @@
   var toast = new Toast();
 
   var cookie = document.cookie;
-  var quin = document.cookie.match(/uin=(\d+);/);
+  var quin = document.cookie.match(/\suin=(\d+);/);
   if (quin) {
     quin = quin[1];
   } else {

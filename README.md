@@ -3,7 +3,7 @@
 
 [下载地址-github](https://github.com/jsososo/qqmusic-cookie-porter/releases)
 
-[下载地址-大陆服务器](http://music.jsososo.com/download/qqmusic_cookie_porter_0_1.zip)
+[下载地址-大陆服务器](http://music.jsososo.com/download/qqmusic_cookie_porter_0_2.zip)
 
 ## 使用
 1、下载并解压压缩包

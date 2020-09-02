@@ -1,16 +1,7 @@
 (function () {
   if (window.location.host !== 'y.qq.com')
     return;
-  var now = new Date().getTime();
-  var lastSetTime = Number(localStorage.getItem('soso-music-cookie'));
-  // 强制刷新 cookie 请求
-  if (window.location.href.indexOf('forceUpdateCookie') > 0) {
-    localStorage.setItem('soso-music-cookie', '0');
-  }
-  // 24小时以内的就先不发送了
-  if (lastSetTime + 3600000 * 24 > now) {
-    return;
-  }
+
 
   function Toast() {
     var toastDom = $('<div id="soso-music-cookie-toast"><div class="content"></div></div>');
@@ -28,21 +19,36 @@
       toastDom.fadeIn();
       setTimeout(that.hide, expireTime);
     };
+    this.changeTxt = function (text) {
+      toastDom.find('.content').text(text);
+    }
     return this;
   }
 
-  var toast = new Toast();
+  function Dialog() {
+    var autoJump = Number(localStorage.getItem('soso-music-auto-jump'));
+    var dialogDom = $(
+      '<div class="popup_guide soso-popup" style="z-index: 1002;">' +
+      '  <div class="dialog-content">' +
+      '    <div class="soso-popup-title">cookie 搬运工！</div>' +
+      '    <div><input id="soso-music-cookie-input" type="text" readonly></div>' +
+      '    <div><button class="copy-cookie" style="margin-right: 10px;">复制</button><button class="jump-cookie">跳转</button></div>' +
+      '    <div><div class="checkbox-check so-auto-jump ' + (autoJump ? 'checked' : '') + '"></div><span class="so-auto-jump" style="padding-left: 10px">重登后自动跳转</span></div>' +
+      '  </div>' +
+      '</div>'
+    );
+    $('body').append(dialogDom);
+    this.getCookie = function () {
+      dialogDom.find('#soso-music-cookie-input').val(document.cookie);
+    }
 
-  var cookie = document.cookie;
-  var quin = document.cookie.match(/\suin=(\d+);/);
-  if (quin) {
-    quin = quin[1];
-  } else {
-    return;
+    this.getCookie();
+    this.dom = dialogDom;
+
+    return this;
   }
-  if (cookie.indexOf('qm_keyst') < 0) {
-    toast.show('未登陆企鹅号', 5000);
-  } else {
+
+  function jump() {
     $.post({
       url: 'https://api.qq.jsososo.com/user/setCookie',
       data: JSON.stringify({
@@ -50,8 +56,10 @@
       }),
       contentType: 'application/json',
       success(res) {
-        localStorage.setItem('soso-music-cookie', String(now));
         toast.show('发送成功，2s后自动跳转！');
+        setTimeout(function () {
+          toast.changeTxt('发送成功，1s后自动跳转！')
+        }, 1000);
         setTimeout(function () {
           window.location = ('http://music.jsososo.com?q=' + quin);
         }, 2000);
@@ -62,6 +70,47 @@
     })
   }
 
-  // alert(document.cookie);
+  var toast = new Toast();
+  var dialog = new Dialog();
+
+  dialog.dom.on('click', '.copy-cookie', function (e) {
+    var input = $('#soso-music-cookie-input')[0];
+    input.select();
+    document.execCommand("Copy");
+    toast.show('复制成功!');
+  })
+
+  dialog.dom.on('click', '.jump-cookie', jump);
+
+  dialog.dom.on('click', '.so-auto-jump', function () {
+    var autoJump = Number(localStorage.getItem('soso-music-auto-jump'));
+
+    if (autoJump) {
+      $('.checkbox-check.so-auto-jump').removeClass('checked');
+    } else {
+      $('.checkbox-check.so-auto-jump').addClass('checked');
+    }
+    localStorage.setItem('soso-music-auto-jump', Number(!Number(autoJump)));
+  })
+
+  var cookie = document.cookie;
+  var quin = document.cookie.match(/\suin=(\d+);/);
+  if (quin) {
+    quin = quin[1];
+  } else {
+    localStorage.setItem('soso-music-cookie-login', '0');
+    return toast.show('未登陆企鹅号', 5000);
+  }
+  if (cookie.indexOf('qm_keyst') < 0) {
+    toast.show('未登陆企鹅号', 5000);
+    localStorage.setItem('soso-music-cookie-login', '0');
+  } else {
+    var isLogin = Number(localStorage.getItem('soso-music-cookie-login'));
+    var autoJump = Number(localStorage.getItem('soso-music-auto-jump'));
+    if (!isLogin && autoJump) {
+      jump();
+    }
+    localStorage.setItem('soso-music-cookie-login', '1');
+  }
 
 })();

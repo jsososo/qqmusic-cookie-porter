@@ -20,3 +20,52 @@
     font-size: 14px;
     line-height: 30px;
 }
+.soso-popup {
+    position: fixed;
+    width: 150px;
+    margin-top: -5px;
+}
+.soso-popup #soso-music-cookie-input {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+}
+.soso-popup button {
+    width: 70px;
+    margin: 10px 0;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #31c27c;
+    box-sizing: border-box;
+    transition: 0.3s;
+    background: #fff;
+    color: #31c27c;
+}
+.soso-popup button:hover {
+    background: #31c27c;
+    color: #fff;
+}
+.soso-popup .checkbox-check.checked {
+    background-image: url("https://y.gtimg.cn/mediastyle/yqq/img/icon_sprite@2x.png");
+    background-size: 200px 340px;
+    background-position: -60px -100px;
+}
+.soso-popup .checkbox-check {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1px solid #31c27c;
+    vertical-align: -3px;
+}
+.soso-popup .soso-popup-title {
+    color: #31c27c;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+.so-auto-jump {
+    cursor: pointer;
+}

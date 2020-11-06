@@ -6,6 +6,7 @@
     height: 40px;
     display: none;
     z-index: 9999;
+    pointer-events: none;
 }
 
 #soso-music-cookie-toast .content {
@@ -25,7 +26,10 @@
     width: 150px;
     margin-top: -5px;
 }
-.soso-popup #soso-music-cookie-input {
+.soso-popup .soso-popup-uin {
+    margin-bottom: 8px;
+}
+.soso-popup input {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 4px;

@@ -2,6 +2,16 @@
   if (window.location.host !== 'y.qq.com')
     return;
 
+  var cookieObj = {};
+  document.cookie.split(';').forEach(function (str) {
+    var keyArr = str.split('=');
+    cookieObj[keyArr[0].replace(/\s/g, '')] = keyArr[1];
+  })
+  if (Number(cookieObj.login_type) === 2) {
+    cookieObj.uin = cookieObj.wxuin;
+  }
+  cookieObj.uin = (cookieObj.uin || '').replace(/\D/g, '');
+
 
   function Toast() {
     var toastDom = $('<div id="soso-music-cookie-toast"><div class="content"></div></div>');
@@ -31,6 +41,7 @@
       '<div class="popup_guide soso-popup" style="z-index: 1002;">' +
       '  <div class="dialog-content">' +
       '    <div class="soso-popup-title">cookie 搬运工！</div>' +
+      '    <div class="soso-popup-uin"><span class="login-type">QQ </span> <input type="text" style="width:100px" /></div>' +
       '    <div><input id="soso-music-cookie-input" type="text" readonly></div>' +
       '    <div><button class="copy-cookie" style="margin-right: 10px;">复制</button><button class="jump-cookie">跳转</button></div>' +
       '    <div><div class="checkbox-check so-auto-jump ' + (autoJump ? 'checked' : '') + '"></div><span class="so-auto-jump" style="padding-left: 10px">重登后自动跳转</span></div>' +
@@ -38,11 +49,12 @@
       '</div>'
     );
     $('body').append(dialogDom);
-    this.getCookie = function () {
-      dialogDom.find('#soso-music-cookie-input').val(document.cookie);
+    dialogDom.find('#soso-music-cookie-input').val(document.cookie);
+    console.log(cookieObj);
+    if (cookieObj.uin) {
+      dialogDom.find('.soso-popup-uin .login-type').html((Number(cookieObj.login_type) === 2 ? 'wxuin' : 'QQ'));
+      dialogDom.find('.soso-popup-uin input').val(cookieObj.uin)
     }
-
-    this.getCookie();
     this.dom = dialogDom;
 
     return this;
@@ -93,16 +105,13 @@
     localStorage.setItem('soso-music-auto-jump', Number(!Number(autoJump)));
   })
 
-  var cookie = document.cookie;
-  var quin = document.cookie.match(/\suin=(\d+);/);
-  if (quin) {
-    quin = quin[1];
-  } else {
+  var quin = cookieObj.uin;
+  if (!quin) {
     localStorage.setItem('soso-music-cookie-login', '0');
-    return toast.show('未登陆企鹅号', 5000);
+    return toast.show('未登陆账号', 5000);
   }
-  if (cookie.indexOf('qm_keyst') < 0) {
-    toast.show('未登陆企鹅号', 5000);
+  if (!cookieObj.qm_keyst) {
+    toast.show('未登陆账号', 5000);
     localStorage.setItem('soso-music-cookie-login', '0');
   } else {
     var isLogin = Number(localStorage.getItem('soso-music-cookie-login'));
